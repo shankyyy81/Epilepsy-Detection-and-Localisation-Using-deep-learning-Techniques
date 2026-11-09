@@ -1,0 +1,315 @@
+{
+  "experiment_name": "baseline",
+  "model_preset": "baseline",
+  "seed": 42,
+  "seeds": [
+    42
+  ],
+  "device": "auto",
+  "output_root": "/Users/shashanksathish/Desktop/epilepsey_unified/bern_eeg/experiments",
+  "data": {
+    "root": "/Users/shashanksathish/Desktop/epilepsey_unified/BERNBarcelona",
+    "labels_path": null,
+    "patient_map": null,
+    "fs": 512,
+    "cache_dir": "/Users/shashanksathish/Desktop/epilepsey_unified/bern_eeg/outputs/cache",
+    "use_cache": false,
+    "channel_mode": "all",
+    "channels": null,
+    "length_policy": "error",
+    "strict": false,
+    "max_samples": null,
+    "dup_check": "block",
+    "dup_block": 64
+  },
+  "preprocess": {
+    "dc_remove": false,
+    "detrend": false,
+    "notch_hz": null,
+    "notch_q": 30.0,
+    "bandpass": null,
+    "filter_order": 4,
+    "normalization": "none"
+  },
+  "stft": {
+    "short": {
+      "win": 256,
+      "hop": 128
+    },
+    "long": {
+      "win": 512,
+      "hop": 256
+    },
+    "fmax": 128,
+    "crop": "half",
+    "representation": "log_magnitude",
+    "scaling": "scipy",
+    "input_bn": false
+  },
+  "grp": {
+    "decimate": 8,
+    "m": 3,
+    "tau": 2,
+    "threshold_mode": "percentile",
+    "percentile": 10.0,
+    "fixed_eps": null,
+    "adaptive_frac": 0.2,
+    "soft_kappa": 0.05,
+    "image_size": 128,
+    "chunk": 8,
+    "auto_subset": 300
+  },
+  "hilbert": {
+    "n_bands": 16,
+    "fmin": 0.5,
+    "fmax": 128.0,
+    "time_bins": 80
+  },
+  "model": {
+    "arch": "baseline",
+    "use_raw": false,
+    "use_stft": true,
+    "use_grp": false,
+    "use_hilbert": false,
+    "fusion": "gated",
+    "use_transformer": false,
+    "embed_dim": 256,
+    "heads": 4,
+    "ca_layers": 2,
+    "tf_layers": 2,
+    "ffn_dim": 512,
+    "dropout": 0.25,
+    "attn_dropout": 0.1,
+    "norm": "batch",
+    "stft_depth": 18,
+    "stft_widths": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "grp_widths": [
+      32,
+      64,
+      128
+    ],
+    "hilbert_widths": [
+      32,
+      64,
+      128
+    ],
+    "raw_widths": [
+      32,
+      64,
+      128,
+      256,
+      256
+    ],
+    "raw_strides": [
+      2,
+      4,
+      4,
+      4,
+      2
+    ],
+    "raw_kernels": [
+      7,
+      15,
+      31
+    ],
+    "raw_dilations": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "token_freq_rows": 8,
+    "encoder_dropout": 0.1,
+    "channel_attention": false,
+    "head_hidden": 128
+  },
+  "loss": {
+    "name": "focal",
+    "gamma": 2.0,
+    "alpha": null,
+    "smoothing": 0.1,
+    "pos_weight": null
+  },
+  "augment": {
+    "enabled": true,
+    "p_noise": 0.0,
+    "noise_std": 0.05,
+    "p_scale": 0.0,
+    "scale_range": [
+      0.8,
+      1.2
+    ],
+    "p_time_mask": 0.0,
+    "time_mask_frac": 0.05,
+    "p_shift": 0.0,
+    "shift_max_s": 0.25,
+    "p_crop": 0.0,
+    "crop_frac": 0.9,
+    "p_warp": 0.0,
+    "warp_max": 0.05,
+    "p_bandstop": 0.0,
+    "bandstop_width_hz": [
+      2.0,
+      8.0
+    ],
+    "bandstop_range_hz": [
+      1.0,
+      100.0
+    ],
+    "p_channel_dropout": 0.0,
+    "p_polarity": 0.0,
+    "p_mixup": 0.0,
+    "mixup_alpha": 0.2,
+    "p_specaug": 1.0,
+    "specaug_frac": 0.08
+  },
+  "train": {
+    "epochs": 3,
+    "batch_size": 32,
+    "auto_batch": false,
+    "accum_steps": 1,
+    "optimizer": "adamw",
+    "lr": 0.0005,
+    "weight_decay": 0.001,
+    "scheduler": "cosine",
+    "warmup_epochs": 0,
+    "min_lr_ratio": 0.01,
+    "patience": 7,
+    "monitor": "val_accuracy",
+    "grad_clip": 1.0,
+    "amp": true,
+    "ema": false,
+    "ema_decay": 0.999,
+    "num_workers": "auto",
+    "drop_last": true,
+    "freeze_epochs": 0,
+    "finetune_lr_mult": 0.1,
+    "save_optimizer": true
+  },
+  "cv": {
+    "mode": "kfold",
+    "n_folds": 10,
+    "inner_val_frac": 0.15,
+    "folds": [
+      0
+    ],
+    "n_clusters": 50
+  },
+  "threshold": {
+    "start": 0.05,
+    "stop": 0.95,
+    "step": 0.05,
+    "criterion": "youden"
+  },
+  "calibration": {
+    "temperature": true,
+    "n_bins": 15
+  },
+  "ssl": {
+    "enabled": false,
+    "mode": "strict",
+    "epochs": 50,
+    "batch_size": 32,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "temperature": 0.1,
+    "proj_dim": 128,
+    "aug": {
+      "p_noise": 0.8,
+      "noise_std": 0.1,
+      "p_scale": 0.8,
+      "scale_range": [
+        0.7,
+        1.3
+      ],
+      "p_time_mask": 0.5,
+      "time_mask_frac": 0.1,
+      "p_shift": 0.5,
+      "shift_max_s": 0.5,
+      "p_crop": 0.5,
+      "crop_frac": 0.85,
+      "p_warp": 0.3,
+      "warp_max": 0.05,
+      "p_bandstop": 0.3,
+      "bandstop_width_hz": [
+        2.0,
+        8.0
+      ],
+      "bandstop_range_hz": [
+        1.0,
+        100.0
+      ],
+      "p_channel_dropout": 0.2,
+      "p_polarity": 0.0,
+      "p_specaug": 0.5,
+      "specaug_frac": 0.1
+    }
+  },
+  "ddqn": {
+    "enabled": false,
+    "win_s": 4.0,
+    "hop_s": 2.0,
+    "history": 4,
+    "encoder_epochs": 15,
+    "encoder_lr": 5e-05,
+    "encoder_patience": 4,
+    "rewards": {
+      "correct": 10.0,
+      "false_focal": -10.0,
+      "missed_focal": -12.0,
+      "defer": -1.0,
+      "early_bonus": 3.0,
+      "early_wrong_penalty": 5.0
+    },
+    "gamma": 0.95,
+    "lr": 0.001,
+    "batch_size": 128,
+    "buffer_size": 50000,
+    "train_steps": 20000,
+    "warmup_steps": 1000,
+    "eps_start": 1.0,
+    "eps_end": 0.05,
+    "eps_decay_steps": 10000,
+    "target_tau": 0.005,
+    "grad_clip": 1.0,
+    "hidden": [
+      256,
+      128
+    ],
+    "dueling": true,
+    "prioritized": false,
+    "per_alpha": 0.6,
+    "per_beta_start": 0.4,
+    "eval_every": 1000,
+    "select_frac": 0.2
+  },
+  "hpo": {
+    "n_trials": 20,
+    "max_epochs": 30,
+    "stage": "optim",
+    "metric": "val_auc"
+  },
+  "eval": {
+    "bootstrap": 2000,
+    "explain": true,
+    "explain_fold": 0,
+    "n_error_examples": 5,
+    "tsne": true,
+    "ig_steps": 32
+  },
+  "sanity": {
+    "enabled": true,
+    "epochs": 5,
+    "max_train": 2000,
+    "auc_limit": 0.62
+  },
+  "logging": {
+    "tensorboard": true
+  },
+  "ablation_id": "A"
+}
